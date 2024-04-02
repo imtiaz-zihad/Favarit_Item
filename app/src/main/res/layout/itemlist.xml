@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:cardCornerRadius="20dp"
+        android:layout_margin="20dp"
+        android:elevation="5dp"
+        android:id="@+id/cardView"
+        >
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:text="@string/app_name"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/favoriteImage"
+            android:src="@drawable/unfill_favorite"
+            android:layout_gravity="end|center_vertical"
+            />
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>
