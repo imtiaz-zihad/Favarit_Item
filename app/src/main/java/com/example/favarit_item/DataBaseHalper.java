@@ -34,10 +34,10 @@ public class DataBaseHalper extends SQLiteOpenHelper {
     }
 
 
-    public boolean InsertData (String Name){
+    public boolean InsertData (String name){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues conVal = new ContentValues();
-        conVal.put("name",Name);
+        conVal.put("name",name);
         conVal.put("isFavorite",0);
         long result = database.insert(DB_TABLE_NAME,null,conVal);
 

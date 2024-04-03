@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
               tvName.setText(name);
 
-              if (isFavorite.equals(0)){
+              if (isFavorite.equals("0")) {
 
                   favoriteImage.setImageResource(R.drawable.unfill_favorite);
               }else {
@@ -109,18 +109,18 @@ public class MainActivity extends AppCompatActivity {
               @Override
               public void onClick(View v) {
 
-                  if (isFavorite.equals(0)){
+                  if (isFavorite.equals("0")){
 
                       dataBaseHalper.updateAddFavorite(Integer.parseInt(id));
                       favoriteImage.setImageResource(R.drawable.fill_favorite);
                       getData();
-                    //  notifyDataSetChanged();
+                    notifyDataSetChanged();
 
                   }else {
                       dataBaseHalper.updateRemoveFavorite(Integer.parseInt(id));
                       favoriteImage.setImageResource(R.drawable.unfill_favorite);
                       getData();
-                  //    notifyDataSetChanged();
+                  notifyDataSetChanged();
 
                   }
 
