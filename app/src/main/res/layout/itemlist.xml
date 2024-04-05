@@ -6,24 +6,24 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="20dp"
-        android:layout_margin="20dp"
+        android:layout_margin="5dp"
         android:elevation="5dp"
         android:id="@+id/cardView"
         >
 
-        <TextView
+        <CheckBox
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/app_name"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
-            android:text="@string/app_name"
             android:textSize="20sp"
-            android:textStyle="italic"
             />
 
+        <!--
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -31,6 +31,7 @@
             android:src="@drawable/unfill_favorite"
             android:layout_gravity="end|center_vertical"
             />
+            -->
 
 
     </androidx.cardview.widget.CardView>

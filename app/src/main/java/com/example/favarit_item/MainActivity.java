@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -82,11 +84,11 @@ public class MainActivity extends AppCompatActivity {
 
             LayoutInflater layoutInflater = getLayoutInflater();
             View view = layoutInflater.inflate(R.layout.itemlist,parent,false) ;
-            TextView tvName;
+            CheckBox tvName;
             ImageView favoriteImage;
 
             tvName=view.findViewById(R.id.tvName);
-            favoriteImage=view.findViewById(R.id.favoriteImage);
+          //  favoriteImage=view.findViewById(R.id.favoriteImage);
 
             HashMap <String,String> myhashmap =arrayList.get(position);
 
@@ -99,29 +101,30 @@ public class MainActivity extends AppCompatActivity {
 
               if (isFavorite.equals("0")) {
 
-                  favoriteImage.setImageResource(R.drawable.unfill_favorite);
-              }else {
+                 tvName.setChecked(false);
 
-                  favoriteImage.setImageResource(R.drawable.fill_favorite);
+              }else {
+                  //favoriteImage.setImageResource(R.drawable.fill_favorite);
+                  tvName.setChecked(true);
               }
 
-          favoriteImage.setOnClickListener(new View.OnClickListener() {
+            tvName.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
 
                   if (isFavorite.equals("0")){
-
                       dataBaseHalper.updateAddFavorite(Integer.parseInt(id));
-                      favoriteImage.setImageResource(R.drawable.fill_favorite);
+                    //  favoriteImage.setImageResource(R.drawable.fill_favorite);
+                      tvName.setChecked(true);
                       getData();
-                    notifyDataSetChanged();
+                      notifyDataSetChanged();
 
                   }else {
                       dataBaseHalper.updateRemoveFavorite(Integer.parseInt(id));
-                      favoriteImage.setImageResource(R.drawable.unfill_favorite);
+                    //  favoriteImage.setImageResource(R.drawable.unfill_favorite);
+                      tvName.setChecked(false);
                       getData();
-                  notifyDataSetChanged();
-
+                      notifyDataSetChanged();
                   }
 
               }
@@ -148,16 +151,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String name = edName.getText().toString();
                 if (name.isEmpty()){
-
                     Toast.makeText(MainActivity.this, "Plz enter your name", Toast.LENGTH_SHORT).show();
-
                 }else {
 
                     boolean isDataInserted = dataBaseHalper.InsertData(name);
                     if (isDataInserted){
                         Toast.makeText(MainActivity.this, "data inserted", Toast.LENGTH_SHORT).show();
                         getData();
-                     //   myAdapter.notifyAll();
+                        //myAdapter.notifyAll();
                         alertDialog.dismiss();
 
                     }else {

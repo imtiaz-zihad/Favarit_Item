@@ -79,7 +79,7 @@ public class DataBaseHalper extends SQLiteOpenHelper {
 
         try {
             int value=0;
-            database.execSQL("UPDATE "+DB_TABLE_NAME+" SET isFavorite'" +value+ "' WHERE id ="+id);
+            database.execSQL("UPDATE "+DB_TABLE_NAME+" SET isFavorite= '" +value+ "' WHERE id ="+id);
             Toast.makeText(context, "UnFavourite", Toast.LENGTH_SHORT).show();
         }catch (SQLException e){
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
