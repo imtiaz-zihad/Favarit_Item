@@ -2,7 +2,11 @@ package com.example.favarit_item;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -18,8 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -45,13 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listview);
 
-       getData();
-
        floatingButton.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                showDialogBox ();
-               getData();
            }
        });
 
@@ -85,10 +88,10 @@ public class MainActivity extends AppCompatActivity {
             LayoutInflater layoutInflater = getLayoutInflater();
             View view = layoutInflater.inflate(R.layout.itemlist,parent,false) ;
             CheckBox tvName;
-            ImageView favoriteImage;
+            CardView cardView;
 
             tvName=view.findViewById(R.id.tvName);
-          //  favoriteImage=view.findViewById(R.id.favoriteImage);
+            cardView=view.findViewById(R.id.cardView);
 
             HashMap <String,String> myhashmap =arrayList.get(position);
 
@@ -116,24 +119,79 @@ public class MainActivity extends AppCompatActivity {
                       dataBaseHalper.updateAddFavorite(Integer.parseInt(id));
                     //  favoriteImage.setImageResource(R.drawable.fill_favorite);
                       tvName.setChecked(true);
-                      getData();
+
                       notifyDataSetChanged();
 
                   }else {
                       dataBaseHalper.updateRemoveFavorite(Integer.parseInt(id));
                     //  favoriteImage.setImageResource(R.drawable.unfill_favorite);
                       tvName.setChecked(false);
-                      getData();
+
                       notifyDataSetChanged();
                   }
-
               }
-          });
+
+            });
+
+             // Delete button এর code lekha hoice
+
+
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    dataBaseHalper.deleteItem(id);
+                    getData();
+                    notifyDataSetChanged();
+
+                }
+            });
+
+
+            registerForContextMenu(cardView);
+
 
 
             return view;
         }
+
     } //end adapter
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = new MenuInflater(this);
+        inflater.inflate(R.menu.menu_context, menu);
+
+//aita dile crash kore
+//        TextView tv1 = findViewById(R.id.delete);
+//        tv1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(MainActivity.this, "Wait Bro!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+
+    }
+
+
+
+    //Aita akhono kori nai
+//    @Override
+//    public boolean onContextItemSelected(@NonNull MenuItem item) {
+//
+//        switch (item.getItemId()) {
+//
+//        }
+//
+//        return super.onContextItemSelected(item);
+//    }
+
+
 
     private void showDialogBox () {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -153,19 +211,22 @@ public class MainActivity extends AppCompatActivity {
                 if (name.isEmpty()){
                     Toast.makeText(MainActivity.this, "Plz enter your name", Toast.LENGTH_SHORT).show();
                 }else {
-
                     boolean isDataInserted = dataBaseHalper.InsertData(name);
                     if (isDataInserted){
                         Toast.makeText(MainActivity.this, "data inserted", Toast.LENGTH_SHORT).show();
+
                         getData();
-                        //myAdapter.notifyAll();
+                        //myAdapter.notifyDataSetChanged();
                         alertDialog.dismiss();
 
                     }else {
                         Toast.makeText(MainActivity.this, "data is not inserted", Toast.LENGTH_SHORT).show();
                     }
+
                 }
             }
+
+
         }); //button tag end here
         alertDialog.show();
     }//showDialogBox end tag
@@ -197,16 +258,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onPause() {
+
+        getData();
+        super.onPause();
+    }
+
+    @Override
     protected void onResume() {
 
         getData();
         super.onResume();
-
     }
-
-
-
-
 }
 
 

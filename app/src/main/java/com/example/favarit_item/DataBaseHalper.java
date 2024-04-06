@@ -90,5 +90,17 @@ public class DataBaseHalper extends SQLiteOpenHelper {
     }
 
 
+    public void deleteItem (String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.execSQL("DELETE FROM " + DB_TABLE_NAME + " WHERE id LIKE "+id);
+            Toast.makeText(context, "Delete successful", Toast.LENGTH_SHORT).show();
+        } catch (SQLException e) {
+            Toast.makeText(context, "Delete failed", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+
 
 } //end tag
