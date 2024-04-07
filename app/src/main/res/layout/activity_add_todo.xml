@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddTodo_Activity"
-    android:background="#0097A7">
+    android:background="#FCFFFF">
 
 
     <EditText
@@ -14,7 +14,7 @@
         android:layout_width="369dp"
         android:layout_height="59dp"
         android:hint="Enter Task Here"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:layout_marginTop="80dp"
         android:layout_centerHorizontal="true"
         tools:ignore="MissingConstraints"
@@ -38,6 +38,7 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="30dp"
         android:id="@+id/addTodoButton"
+        android:backgroundTint="#0097A7"
         android:src="@drawable/baseline_check_24"
         />
 

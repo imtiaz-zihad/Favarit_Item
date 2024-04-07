@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
         dataBaseHalper = new DataBaseHalper(this);
         floatingButton = findViewById(R.id.floatingButton);
-
         listView = findViewById(R.id.listview);
 
 
@@ -140,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                       dataBaseHalper.deleteItem(id);
                       getData();
                       notifyDataSetChanged();
+                      Toast.makeText(MainActivity.this, "Tusk Finish", Toast.LENGTH_SHORT).show();
 
                   }else {
                       dataBaseHalper.updateRemoveFavorite(Integer.parseInt(id));
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+/*
     private void showDialogBox () {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
         View myview =getLayoutInflater().inflate(R.layout.input_layout,null) ;
@@ -219,6 +219,8 @@ public class MainActivity extends AppCompatActivity {
         }); //button tag end here
         alertDialog.show();
     }//showDialogBox end tag
+
+ */
 
 
     public void getData (){
