@@ -3,6 +3,7 @@ package com.example.favarit_item;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,10 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
     ListView listView;
     DataBaseHalper dataBaseHalper;
-    ArrayList <HashMap <String,String>> arrayList = new ArrayList<>();
-    HashMap <String,String> hashMap;
-    Adapter myAdapter;
+    ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
+    HashMap<String, String> hashMap;
+    BaseAdapter myAdapter;
     FloatingActionButton floatingButton;
+    HashMap<String, CountDownTimer> timerHashMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,32 +59,23 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-
         dataBaseHalper = new DataBaseHalper(this);
         floatingButton = findViewById(R.id.floatingButton);
         listView = findViewById(R.id.listview);
 
+        floatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialogBox();
+            }
+        });
 
-
-
-       floatingButton.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-
-               Intent intent = new Intent(MainActivity.this,AddTodo_Activity.class);
-               startActivity(intent);
-              // showDialogBox ();
-           }
-       });
-
-      myAdapter = new MyAdapter();
-      listView.setAdapter((ListAdapter) myAdapter);
-
-      
-
+        myAdapter = new MyAdapter();
+        listView.setAdapter(myAdapter);
+        getData();
     }
-    public class MyAdapter extends BaseAdapter {
 
+    public class MyAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -101,90 +94,79 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
             LayoutInflater layoutInflater = getLayoutInflater();
-            View view = layoutInflater.inflate(R.layout.itemlist,parent,false) ;
+            View view = layoutInflater.inflate(R.layout.itemlist, parent, false);
             CheckBox tvName;
             CardView cardView;
 
-            tvName=view.findViewById(R.id.tvName);
-            cardView=view.findViewById(R.id.cardView);
+            tvName = view.findViewById(R.id.tvName);
+            cardView = view.findViewById(R.id.cardView);
 
-            HashMap <String,String> myhashmap =arrayList.get(position);
+            HashMap<String, String> myhashmap = arrayList.get(position);
 
-              String id = myhashmap.get("id");
-              String name = myhashmap.get("name");
-              String isFavorite = myhashmap.get("isFavorite");
+            String id = myhashmap.get("id");
+            String name = myhashmap.get("name");
+            String isFavorite = myhashmap.get("isFavorite");
 
+            tvName.setText(name);
 
-              tvName.setText(name);
-
-              if (isFavorite.equals("0")) {
-
-                 tvName.setChecked(false);
-
-              }else {
-                  //favoriteImage.setImageResource(R.drawable.fill_favorite);
-                  tvName.setChecked(true);
-              }
+            if (isFavorite.equals("0")) {
+                tvName.setChecked(false);
+            } else {
+                tvName.setChecked(true);
+            }
 
             tvName.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-
-                  if (isFavorite.equals("0")){
-                      dataBaseHalper.updateAddFavorite(Integer.parseInt(id));
-                    //  favoriteImage.setImageResource(R.drawable.fill_favorite);
-                      tvName.setChecked(true);
-                      dataBaseHalper.deleteItem(id);
-                      getData();
-                      notifyDataSetChanged();
-                      Toast.makeText(MainActivity.this, "Tusk Finish", Toast.LENGTH_SHORT).show();
-
-                  }else {
-                      dataBaseHalper.updateRemoveFavorite(Integer.parseInt(id));
-                    //  favoriteImage.setImageResource(R.drawable.unfill_favorite);
-                      tvName.setChecked(false);
-                      getData();
-                      notifyDataSetChanged();
-                  }
-              }
-
-            });
-
-             // Delete button এর code lekha hoice
-
-
-       /*     cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (isFavorite.equals("0")) {
+                        // Cancel existing countdown timer if checkbox is unchecked again
+                        if (timerHashMap.containsKey(id)) {
+                            CountDownTimer timer = timerHashMap.get(id);
+                            timer.cancel();
+                            timerHashMap.remove(id);
+                            tvName.setText(name); // Reset checkbox text
+                        } else {
+                            // Start countdown timer for 10 seconds
+                            CountDownTimer countDownTimer = new CountDownTimer(5000, 1000) {
+                                public void onTick(long millisUntilFinished) {
+                                    // Update UI to display remaining time
+                                    tvName.setText("Deleting in " + millisUntilFinished / 1000 + " seconds");
+                                }
 
-
-                    dataBaseHalper.deleteItem(id);
-                    getData();
-                    notifyDataSetChanged();
-
+                                public void onFinish() {
+                                    // Delete item after countdown finishes
+                                    dataBaseHalper.deleteItem(id);
+                                    getData();
+                                    notifyDataSetChanged();
+                                    Toast.makeText(MainActivity.this, "Task Finished", Toast.LENGTH_SHORT).show();
+                                }
+                            }.start();
+                            // Store the timer associated with this checkbox
+                            timerHashMap.put(id, countDownTimer);
+                        }
+                    } else {
+                        // Cancel the countdown timer if checkbox is unchecked before deletion
+                        if (timerHashMap.containsKey(id)) {
+                            CountDownTimer timer = timerHashMap.get(id);
+                            timer.cancel();
+                            timerHashMap.remove(id);
+                            tvName.setText(name); // Reset checkbox text
+                        }
+                        tvName.setChecked(false);
+                        getData();
+                        notifyDataSetChanged();
+                    }
                 }
             });
 
-        */
-
-
-           // registerForContextMenu(cardView);
-
-
-
             return view;
         }
+    }
 
-    } //end adapter
-
-
-
-/*
-    private void showDialogBox () {
+    private void showDialogBox() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        View myview =getLayoutInflater().inflate(R.layout.input_layout,null) ;
+        View myview = getLayoutInflater().inflate(R.layout.input_layout, null);
         alert.setView(myview);
         final AlertDialog alertDialog = alert.create();
         alertDialog.setCancelable(true);
@@ -197,69 +179,52 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = edName.getText().toString();
-                if (name.isEmpty()){
+                if (name.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Plz enter your name", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     boolean isDataInserted = dataBaseHalper.InsertData(name);
-                    if (isDataInserted){
+                    if (isDataInserted) {
                         Toast.makeText(MainActivity.this, "data inserted", Toast.LENGTH_SHORT).show();
-
-                        getData();
-                        //myAdapter.notifyDataSetChanged();
                         alertDialog.dismiss();
-
-                    }else {
+                        getData();
+                    } else {
                         Toast.makeText(MainActivity.this, "data is not inserted", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
+        });
 
-
-        }); //button tag end here
         alertDialog.show();
-    }//showDialogBox end tag
+    }
 
- */
-
-
-    public void getData (){
-
+    public void getData() {
         Cursor cursor = dataBaseHalper.getUserData();
         arrayList.clear();
-        if (cursor!=null){
-
-            while (cursor.moveToNext()){
-
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
                 int id = cursor.getInt(0);
                 String name = cursor.getString(1);
                 int isFavorite = cursor.getInt(2);
 
-
-                    hashMap = new HashMap<>();
-                    hashMap.put("id",""+id);
-                    hashMap.put("name",""+name);
-                    hashMap.put("isFavorite",""+isFavorite);
-                    arrayList.add(hashMap);
-
+                hashMap = new HashMap<>();
+                hashMap.put("id", "" + id);
+                hashMap.put("name", "" + name);
+                hashMap.put("isFavorite", "" + isFavorite);
+                arrayList.add(hashMap);
             }
         }
-
-    }//getData end here
-
-
-    @Override
-    protected void onPause() {
-        getData();
-        super.onPause();
+        myAdapter.notifyDataSetChanged();
     }
 
     @Override
     protected void onResume() {
-
         getData();
         super.onResume();
     }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        getData();
+    }
 }
-
-
