@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddTodo_Activity"
+    android:background="#0097A7">
+
+
+    <EditText
+        android:id="@+id/edText"
+        android:layout_width="369dp"
+        android:layout_height="59dp"
+        android:hint="Enter Task Here"
+        android:textColor="@color/white"
+        android:layout_marginTop="80dp"
+        android:layout_centerHorizontal="true"
+        tools:ignore="MissingConstraints"
+        />
+
+    <EditText
+        android:id="@+id/edDate"
+        android:layout_width="369dp"
+        android:layout_height="59dp"
+        android:hint="Date not set"
+        android:textColor="@color/white"
+        android:layout_marginTop="180dp"
+        android:layout_centerHorizontal="true"
+        tools:ignore="MissingConstraints"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="30dp"
+        android:id="@+id/addTodoButton"
+        android:src="@drawable/baseline_check_24"
+        />
+
+
+</RelativeLayout>

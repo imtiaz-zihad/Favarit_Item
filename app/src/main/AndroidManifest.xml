@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Favarit_Item"
         tools:targetApi="31">
         <activity
+            android:name=".AddTodo_Activity"
+            android:exported="false" />
+        <activity
             android:name=".menus"
             android:exported="false" />
         <activity

@@ -1,5 +1,6 @@
 package com.example.favarit_item;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -26,6 +27,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -46,15 +50,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+
         dataBaseHalper = new DataBaseHalper(this);
         floatingButton = findViewById(R.id.floatingButton);
 
         listView = findViewById(R.id.listview);
 
+
+
+
        floatingButton.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               showDialogBox ();
+
+               Intent intent = new Intent(MainActivity.this,AddTodo_Activity.class);
+               startActivity(intent);
+              // showDialogBox ();
            }
        });
 
@@ -119,14 +137,15 @@ public class MainActivity extends AppCompatActivity {
                       dataBaseHalper.updateAddFavorite(Integer.parseInt(id));
                     //  favoriteImage.setImageResource(R.drawable.fill_favorite);
                       tvName.setChecked(true);
-
+                      dataBaseHalper.deleteItem(id);
+                      getData();
                       notifyDataSetChanged();
 
                   }else {
                       dataBaseHalper.updateRemoveFavorite(Integer.parseInt(id));
                     //  favoriteImage.setImageResource(R.drawable.unfill_favorite);
                       tvName.setChecked(false);
-
+                      getData();
                       notifyDataSetChanged();
                   }
               }
@@ -136,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
              // Delete button এর code lekha hoice
 
 
-            cardView.setOnClickListener(new View.OnClickListener() {
+       /*     cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -148,8 +167,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+        */
 
-            registerForContextMenu(cardView);
+
+           // registerForContextMenu(cardView);
 
 
 
@@ -158,38 +179,6 @@ public class MainActivity extends AppCompatActivity {
 
     } //end adapter
 
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = new MenuInflater(this);
-        inflater.inflate(R.menu.menu_context, menu);
-
-//aita dile crash kore
-//        TextView tv1 = findViewById(R.id.delete);
-//        tv1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(MainActivity.this, "Wait Bro!", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
-    }
-
-
-
-    //Aita akhono kori nai
-//    @Override
-//    public boolean onContextItemSelected(@NonNull MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//
-//        }
-//
-//        return super.onContextItemSelected(item);
-//    }
 
 
 
@@ -232,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
     }//showDialogBox end tag
 
 
-    private void getData (){
+    public void getData (){
 
         Cursor cursor = dataBaseHalper.getUserData();
         arrayList.clear();
@@ -259,7 +248,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-
         getData();
         super.onPause();
     }
